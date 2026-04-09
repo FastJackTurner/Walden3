@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link href="/Assets/output.css" rel="stylesheet"/>
+    <script src="/Assets/htmx.min.js"></script>
+    <title>
+      {% block title %}{{ title }}{% endblock %}
+    </title>
+    {% block head %}{% endblock %}
+    <header class="bg-blue-500 p-4" hx-boost="true">
+      <a href="nolinkyet">
+       | Some Sort of NavBar |
+      </a>
+      <a href="/create_tp">
+        Create Treatment Plan |
+      </a>
+      <a href="/schedule">
+        Your Schedule |
+      </a>
+      <a href="/review_notes">
+        Review Session Notes |
+      </a>
+      <a href="/make_schedule">
+        Make Schedule |
+      </a>
+      <a href ="/view_tp">
+        Review Treatment Plans |
+      </a>
+    </header>
+    
+  </head>
+  <body>
+    <main>
+    <!-- <main class="flex-grow p-4"> -->
+      <div id="content">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </body>
+</html>

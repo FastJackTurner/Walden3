@@ -1,0 +1,13 @@
+{% for todo in todos %}
+<div class="flex flex-wrap gap-4 p-6 justify-center text-lg font-serif" id="apptview">
+    <a href="./sessionnote"
+    class="bg-gray-100 flex-grow text-black border-l-8 border-green-500 rounded-md px-3 py-2 w-full md:w-5/12 lg:w-3/12">
+   <span> Appointment with {{ todo }}</span>
+
+        <div class="text-gray-500 font-thin text-sm pt-1">
+            <span>Appt starts at </span>
+        </div>
+    </a>
+</div>
+{% endfor %}
+

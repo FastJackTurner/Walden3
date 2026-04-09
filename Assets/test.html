@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<title>Axum/HTMX </title>
+<script src="/Assets/htmx.min.js"></script>
+<link href="/Assets/output.css" rel="stylesheet" >
+<header class = "bg-blue-500 p-4">
+   <a href="/Assets/2test.html"> hello </a>
+</header>
+<body class="text-center flex flex-col w-full gap-6 mt-10">
+   <form hx-post="/users" hx-target="#user-list" hx-swap="beforeend">
+      <input type="text" name="name" placeholder="Name" class="border border-gray-300 p-2 rounded">
+      <input type="email" name="email" placeholder="Email" class="border border-gray-300 p-2 rounded">
+      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add User</button>
+   </form>
+      <table id="user-list" class="w-1/2 mx-auto mt-4 border border-gray-300">
+         <thead>
+            <tr class="border border-gray-300">
+               <th class="px-4 py-2">Name</th>
+               <th class="px-4 py-2">Email</th>
+               <th class="px-4 py-2">Actions</th>
+            </tr>
+         </thead>
+      </table>
+</body>
+</html>
+

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %} Session Note Screen {% endblock %}
+{% block content %}
+
+       <div class="flex flex-col min-h-screen" id="Session note Screen">
+
+       <div class="flex flex-row flex-grow">
+
+          <aside class="w-64 p-4 bg-gray-200 hidden sm:block">
+             <p> Data entry </p>
+             <p> Session note shit </p>
+          </aside>
+
+           <main class="flex-grow p-4">
+              <h1 class="text-green-500">Howdy!</h1>
+              <a href="/another_page"
+                 class="text-indigo-500 underline hover:text-indigo-300">
+                Another page!
+              </a>
+              <button
+                type="button"
+                hx-get="/api/hello"
+                hx-swap="innerHtml"
+                class="rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                say "Hello!"
+              </button>
+           data collection content here
+           </main>
+       </div>
+
+       <footer class="bg-gray-300 p-4">
+            what to put here?
+       </footer>
+     </div>
+
+
+{% endblock %}

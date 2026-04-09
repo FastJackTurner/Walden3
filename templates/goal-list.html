@@ -1,0 +1,42 @@
+{% for num in goals %}
+
+<form
+  hx-post="/post_goal"
+  hx-swap="innerHTML"    
+  class="max-w-md"
+>
+    <label for="goal_name">Fucking goal name input:</label>
+    <input type="text" id="goal_name" name="goal_name" placeholder="Type something, genius" pattern="[A-Za-z]+"
+      class="m-2 p-2 rounded-sm border border-black" title="Letters only, you illiterate fuck" required>
+    <br>
+    <label for="tp_id">Fucking tp_id input:</label>
+    <input type="number" id="plan_id" name="tp_id"
+     class="m-2 p-2 rounded-sm border border-black" title="Numbers only, you illiterate fuck" required>
+    <br>
+
+    <label for="data_type">Choose your favorite way to waste time, you lazy prick:</label>
+    <select name="data_type" id="data_type" class="m-2 p-2 rounded-sm border border-black">
+      <optgroup label="Continuous Measurement">
+        <option value="1">Count</option>
+        <option value="2">Duration</option>
+        <option value="3">Rate</option>
+      </optgroup>
+      <optgroup label="Discontinuous Measurement">
+        <option value="3">Whole-Interval</option>
+        <option value="4">Planned Check</option>
+      </optgroup>
+    </select>
+    <br>
+
+    <label for="teaching_procedures">Pour your heart out here, or just bitch about frameworks:</label>
+      <textarea class="m-2 p-2 rounded-sm border border-black" name="teaching_procedures" id="teaching_procedures" rows="4" cols="40"
+      placeholder="Go on, vent your pathetic frustrations" class="border-2 border-black"></textarea>
+    <br>
+    <button
+        type="submit"
+        class="rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+    >
+        Add
+    </button>
+</form>
+{% endfor %}

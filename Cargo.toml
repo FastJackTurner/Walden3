@@ -1,0 +1,17 @@
+[package]
+name = "W3"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = {version = "0.8.8", features = ["macros"]}
+askama = {version = "0.15.5"}
+sqlx = {version = "0.8.6", features = ["runtime-tokio-rustls", "postgres", "macros", "time", "migrate", "chrono"]} 
+tower-http = {version = "0.6.8", features = ["full"]}
+tokio = { version = "1.50.0", features = ["full"] }
+tower = "0.5.3"
+anyhow = "1.0.102"
+serde = { version = "1.0.228", features = ["derive"] }
+chrono = { version = "0.4.44", features = ["clock", "serde"] }
+config = { version = "0.15.22", features = ["yaml"] }
+recursive = "0.1.1"
