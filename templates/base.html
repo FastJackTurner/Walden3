@@ -7,30 +7,68 @@
       {% block title %}{{ title }}{% endblock %}
     </title>
     {% block head %}{% endblock %}
-    <header class="bg-blue-500 p-4" hx-boost="true">
-      <a href="nolinkyet">
-       | Some Sort of NavBar |
+    <header class="bg-bg0_h p-4" hx-boost="true">
+    {% match user %}
+      {% when None %}
+      <a href = "/login"
+      class="link"
+      >
+        Login!
       </a>
-      <a href="/create_tp">
-        Create Treatment Plan |
-      </a>
-      <a href="/schedule">
-        Your Schedule |
-      </a>
-      <a href="/review_notes">
+    {% when Some with (u) %}
+      <a href = "/logout"
+      class="link"
+      >
+        Logout |
+       </a>
+      <a hx-get="/get_my_id"
+         hx-swap="outerHTML"
+      class="link"
+      >
+        My ID |
+       </a>
+      {% if u.can_access(Role::Tech) %}
+      <a href="/review_notes"
+      class="link"
+      >
         Review Session Notes |
       </a>
-      <a href="/make_schedule">
+      <a href="/schedule"
+      class="link"
+      >
+        Your Schedule |
+      </a>
+      {% endif %}
+      {% if u.can_access(Role::Consultant) %}
+      <a href="/tp"
+      class="link"
+      >
+        Create Treatment Plan |
+      </a>
+      <a href="/schedules"
+      class="link"
+      >
         Make Schedule |
       </a>
-      <a href ="/view_tp">
-        Review Treatment Plans |
-      </a>
+      {% endif %}
+    {% if u.can_access(Role::Admin) %}
+    <label 
+      class="link"
+      >
+    Well aint you special |
+    </label>
+    {% else %}
+    {% endif %}
+    {% endmatch %}
     </header>
+        
     
   </head>
-  <body>
-    <main>
+  <body
+    class="bg-bg1"
+  >
+    <main
+    >
     <!-- <main class="flex-grow p-4"> -->
       <div id="content">
         {% block content %}{% endblock %}

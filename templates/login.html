@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Login Page! {% endblock %}
+{% block content %}
+<!-- <div class="flex-grow p-4"> -->
+<form action="/login" method="POST">
+  <label
+  for="login"
+  class="block text-sm leading-6 m-2 p-2 font-medium text-fg4">
+  </label>
+    <input type="hidden" name="csrf_token" value = "{{ csrf_token }}">
+            <input
+                type="text"
+                name="username"
+                id="username"
+                class="text-form"
+                placeholder="Username"
+            />
+            <input
+                type="password"
+                name="password"
+                id="pwd"
+                class="text-form"
+                placeholder="Password"
+            />
+            <button
+                type="submit"
+                class="aqua-button"
+            >
+                Login
+            </button>
+        <!-- </div> -->
+</form>
+<div id="login" /> 
+{% endblock %}

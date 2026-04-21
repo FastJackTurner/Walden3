@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %} Edit Schedules{% endblock %}
+{% block content %}
+
+       <div class="flex flex-col min-h-screen" id="Schedule Screen">
+
+       <div class="flex flex-row flex-grow">
+
+          <aside class="w-64 p-4 bg-bg0 hidden sm:block">
+             <p
+               hx-get="/view_clients"
+               hx-swap="main"
+               hx-target="#center"
+               class="tan-link"
+            > View Clients</p>
+             <p
+               hx-get="/view_schedules"
+               hx-swap="innerHTML"
+               hx-target="#center"
+               class="tan-link"
+            > View Schedules </p>
+             <p
+               hx-get="/make_schedule"
+               hx-swap="main"
+               hx-target="#center"
+               class="tan-link"
+            > Schedule Appointment </p>
+          </aside>
+         <div id="center">
+
+         </div>
+
+
+     </div>
+   </div>
+
+
+{% endblock %}

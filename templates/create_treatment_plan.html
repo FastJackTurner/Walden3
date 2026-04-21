@@ -1,0 +1,71 @@
+           <main class="flex-grow p-4">
+            <div
+            id="center">
+            <p class="text-fg4"> {{ msg }}<p>
+                 <form
+                     hx-post="/post_tp"
+                     hx-swap="innerHTML"
+                     class="max-w-md m-2 p-2 rounded-sm border border-dp2"
+                 >
+                  <input
+                     type="numbers"
+                     id="clients_id"
+                     name="client"
+                     min="0"
+                     placeholder="Client ID"
+                     class="max-w-md m-2 p-2 rounded-sm border border-fg4 caret-da2 text-fg4 focus:outline-none focus:ring-2 focus:ring-dp1"
+                  
+                  />
+                  <input
+                     type="hidden"
+                     name="author_id"
+                     value="{{ id }}""
+                  />
+                  <input
+                     type="text"
+                     id="client_name"
+                     name="client_name"
+                     placeholder="Client Name"
+                     class="max-w-md m-2 p-2 rounded-sm border border-fg4 text-fg4 caret-da2 focus:outline-none focus:ring-2 focus:ring-dp1"
+                   />
+                  <input
+                     type="text"
+                     id="author_name"
+                     name="author_name"
+                     placeholder="Author Name"
+                     class="max-w-md m-2 p-2 rounded-sm border border-fg4 text-fg4 caret-da2 focus:outline-none focus:ring-2 focus:ring-dp1"
+                   />
+                  <button
+                     type="submit"
+                     class="rounded-md bg-db1 px-2.5 py-1.5 text-sm font-semibold text-fg1 shadow-sm hover:bg-db2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dp1"
+                  > Submit Plan
+                  </button>
+                 </form>
+                 <form
+                     hx-post ="/create_goal"
+                     hx-swap="innerHtml"
+                     class="max-w-md m-2 p-2 rounded-sm border border-dp2"
+                  >               
+                  <label
+                     for="goal_numbers"
+                     class="text-da2""
+                     >Goal numbers?</label
+                  >
+                  <div class="mt-2 inline-flex flex-row space-x-2">
+                  <input
+                     type="number"
+                     id="goal_numbers"
+                     name="goal_numbers"
+                     min="1"
+                     max="20"
+                     class="max-w-md m-2 p-2 rounded-sm border border-fg4 text-fg4 caret-da2 focus:outline-none focus:ring-2 focus:ring-dp1"
+                  />
+                  <button
+                     type="submit"
+                     class="rounded-md bg-db1 px-2.5 py-1.5 text-sm font-semibold text-fg1 shadow-sm hover:bg-db2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dp1"
+                  > create goals
+                  </button>
+               </form>
+         </div>
+      <div id="goals" />
+           </main>

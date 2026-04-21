@@ -1,1 +1,52 @@
 @import "tailwindcss";
+
+@theme {
+  --color-*: initial;
+  --color-dr1: #cc241d;
+  --color-dgr1: #98971a;
+  --color-dy1: #d79921;
+  --color-db1: #458588;
+  --color-dp1: #b16286;
+  --color-da1: #689d6a;
+  --color-dg1: #a89984;
+  --color-dg2: #928374;
+  --color-dr2: #fb4934;
+  --color-dgr2: #b8bb26;
+  --color-dy2: #fabd2f;
+  --color-db2: #83a598;
+  --color-dp2: #d3869b;
+  --color-da2: #8ec07c;
+  --color-fg1: #ebddb2;
+  --color-bg0_h: #1d2021;
+  --color-bg0: #282828;
+  --color-bg1: #3c3836;
+  --color-bg2: #504945;
+  --color-bg3: #665c54;
+  --color-bg4: #7c6f64;
+  --color-do1: #d65d0e;
+  --color-bg0_s: #32302f;
+  --color-fg4: #a89984;
+  --color-fg3: #bdae93;
+  --color-fg2: #d5c4a1;
+  --color-fg0: #fbf1c7;
+  --color-do2: #fe8019; 
+  }
+
+@layer components {
+  .link {
+    @apply text-db1 hover:text-db2
+  }
+
+  .text-form {
+    @apply max-w-md m-2 p-2 rounded-sm border border-fg4 caret-da2 text-fg4 focus:outline-none focus:ring-2 focus:ring-dp1 placeholder:text-fg4     
+  }
+
+  .tan-link {
+    @apply text-fg4 hover:text-fg2
+  }
+
+  .aqua-button {
+    @apply rounded-md bg-db1 px-2.5 py-1.5 text-sm font-semibold text-fg1 shadow-sm hover:bg-db2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dp1    
+  }
+
+}

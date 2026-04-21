@@ -4,14 +4,27 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-axum = {version = "0.8.8", features = ["macros"]}
-askama = {version = "0.15.5"}
-sqlx = {version = "0.8.6", features = ["runtime-tokio-rustls", "postgres", "macros", "time", "migrate", "chrono"]} 
-tower-http = {version = "0.6.8", features = ["full"]}
-tokio = { version = "1.50.0", features = ["full"] }
-tower = "0.5.3"
 anyhow = "1.0.102"
-serde = { version = "1.0.228", features = ["derive"] }
+argon2 = "0.5.3"
+async-trait = "0.1.89"
+askama = {version = "0.15.5"}
+axum-extra = {version = "0.12.6", features = ["cookie"]}
+axum-login = "0.18.0"
+axum = {version = "0.8.8", features = ["macros"]}
 chrono = { version = "0.4.44", features = ["clock", "serde"] }
 config = { version = "0.15.22", features = ["yaml"] }
+http = "1"
+log = "0.4.24"
+pin-project-lite = "0.2"
+rand_core = {version = "0.10.1"}
+rand = "0.10.1"
 recursive = "0.1.1"
+serde = { version = "1.0.228", features = ["derive"] }
+sqlx = {version = "0.8.6", features = ["runtime-tokio-rustls", "postgres", "macros", "time", "migrate", "chrono"]} 
+tokio = { version = "1.50.0", features = ["full"] }
+tower = "0.5.3"
+tower-http = {version = "0.6.8", features = ["full"]}
+tower-sessions = "0.14.0"
+tower-sessions-sqlx-store = {version = "0.15.0", features = ["postgres"]}
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.19", features = ["env-filter"]}

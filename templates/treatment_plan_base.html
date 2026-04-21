@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Treatment Plans {% endblock %}
+{% block content %}
+
+       <div class="flex flex-col min-h-screen" id="Session note Screen">
+
+       <div class="flex flex-row flex-grow">
+
+          <aside class="w-64 p-4 bg-bg0 hidden sm:block">
+             <p
+               hx-get="/view_tp"
+               hx-swap="innerHTML"
+               hx-target="#center"
+               class="text-fg4 hover:text-fg2"
+            > View Plans </p>
+             <p
+               hx-get="/create_tp"
+               hx-swap="main"
+               hx-target="#center"
+               class="text-fg4 hover:text-fg2"
+            > Create Plan </p>
+          </aside>
+         <div id="center">
+
+         </div>
+
+
+     </div>
+   </div>
+
+
+{% endblock %}
