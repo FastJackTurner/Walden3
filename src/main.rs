@@ -64,7 +64,8 @@ async fn main() {
     .route("/schedules", get(routes::schedules))
     .route("/view_schedules", get(routes::view_schedules))
     .route("/make_schedule", get(routes::make_schedule))
-    .route("/post_schedule", post(routes::post_tech_schedule))
+    .route("/post_tech_schedule", post(routes::post_tech_schedule))
+    .route("/post_cons_schedule", post(routes::post_cons_schedule))
     //
     .route("/view_clients", get(routes::view_clients))
     //

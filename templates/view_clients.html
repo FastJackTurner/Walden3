@@ -1,5 +1,5 @@
 {% for client in clients %}
-<ul class="text-fg4">{{ client.cl_id }} <ul>
-<ul class="text-fg4">{{ client.cl_f_name }} <ul>
-<ul class="text-fg4">{{ client.cl_l_name }} <ul>
+<ul class="text-fg4">Client ID: {{ client.cl_id }} <ul>
+<ul class="text-fg4">Client Name: {{ client.cl_f_name }} {{ client.cl_l_name }} <ul>
+<br>
 {% endfor %}

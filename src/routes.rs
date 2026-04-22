@@ -272,7 +272,7 @@ pub async fn post_cons_schedule(
 ) -> impl IntoResponse {
   let appt_id:Result<i32, _> = sqlx::query_scalar(
     r#"
-      insert into consschedule(co_id, cl_id, appt_date, appt_time, parent_training) vales ($1, $2, $3, $4, $5) returning appt_id
+      insert into consschedule(cons_id, cl_id, appt_date, appt_time, parent_training) vales ($1, $2, $3, $4, $5) returning appt_id
     "#
   )
   .bind(sched.co_id)
@@ -292,9 +292,8 @@ pub async fn post_cons_schedule(
 // POSTTECHSCHEDULE:
 #[derive(Deserialize, serde::Serialize, Clone, Debug)]
 pub struct TechAppt {
-  pub co_id: i32,
   pub cl_id: i32,
-  pub te_id: i32,
+  pub technician_id: i32,
   pub appt_date: chrono::NaiveDate,
   pub appt_time: chrono::NaiveTime,
 }
@@ -306,11 +305,10 @@ pub async fn post_tech_schedule(
 ) -> impl IntoResponse {
   let appt_id:Result<i32, _> = sqlx::query_scalar(
         r#"
-          insert into techschedule(co_id, cl_id, te_id, appt_date, appt_time) values($1, $2, $3, $4, $5) returning appt_id   
+          insert into techschedule( client_id, technician_id, appt_date, appt_time) values($1, $2, $3, $4 ) returning appt_id   
         "#)
-        .bind(sched.co_id)
         .bind(sched.cl_id)
-        .bind(sched.te_id)
+        .bind(sched.technician_id)
         .bind(sched.appt_date)
         .bind(sched.appt_time)
         .fetch_one(&pool.pool)
@@ -467,20 +465,6 @@ pub async fn view_clients(
 ) -> impl IntoResponse {
   let mut id: i32 = auth_session.clone().user.unwrap().id;
   let user = auth_session.user;
-  let co_id: Result<i32, _> = sqlx::query_scalar("select co_id from consultants where u_id = $1")
-    .bind(id)
-    .fetch_one(&pool.pool)
-    .await;
-
-  match co_id {
-    Ok(c_id) => id = c_id,
-    Err(e) => {
-      let template = ErrorTemplate {
-        error: e.to_string(),
-      };
-      return HtmlTemplate(template).into_response();
-    }
-  }
 
   let query: Result<Vec<Clients>, _> =
     sqlx::query_as("select cl_id, cl_f_name, cl_l_name from clients where co_id = $1")

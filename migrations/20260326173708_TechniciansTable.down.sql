@@ -1,2 +1,2 @@
 -- Add down migration script here
-drop table technicians;
+drop table if exists technicians;
