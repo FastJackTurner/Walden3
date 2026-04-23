@@ -1,4 +1,4 @@
-/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.2.4 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -28,6 +28,7 @@
     --color-db1: #458588;
     --color-dp1: #b16286;
     --color-dg1: #a89984;
+    --color-dr2: #fb4934;
     --color-db2: #83a598;
     --color-dp2: #d3869b;
     --color-da2: #8ec07c;
@@ -35,8 +36,10 @@
     --color-bg0_h: #1d2021;
     --color-bg0: #282828;
     --color-bg1: #3c3836;
+    --color-do1: #d65d0e;
     --color-fg4: #a89984;
     --color-fg2: #d5c4a1;
+    --color-do2: #fe8019;
   }
 }
 @layer base {
@@ -295,8 +298,20 @@
     border-left-style: var(--tw-border-style);
     border-left-width: 8px;
   }
+  .border-do1 {
+    border-color: var(--color-do1);
+  }
+  .border-dp1 {
+    border-color: var(--color-dp1);
+  }
   .border-dp2 {
     border-color: var(--color-dp2);
+  }
+  .border-dr1 {
+    border-color: var(--color-dr1);
+  }
+  .border-dr2 {
+    border-color: var(--color-dr2);
   }
   .border-fg4 {
     border-color: var(--color-fg4);
@@ -312,9 +327,6 @@
   }
   .bg-db1 {
     background-color: var(--color-db1);
-  }
-  .bg-dp1 {
-    background-color: var(--color-dp1);
   }
   .p-2 {
     padding: calc(var(--spacing) * 2);
@@ -383,14 +395,23 @@
   .text-da2 {
     color: var(--color-da2);
   }
-  .text-dg1 {
-    color: var(--color-dg1);
+  .text-do1 {
+    color: var(--color-do1);
+  }
+  .text-do2 {
+    color: var(--color-do2);
   }
   .text-dp1 {
     color: var(--color-dp1);
   }
+  .text-dp2 {
+    color: var(--color-dp2);
+  }
   .text-dr1 {
     color: var(--color-dr1);
+  }
+  .text-dr2 {
+    color: var(--color-dr2);
   }
   .text-fg1 {
     color: var(--color-fg1);
@@ -427,13 +448,6 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-db2);
-      }
-    }
-  }
-  .hover\:bg-dp2 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-dp2);
       }
     }
   }
@@ -486,11 +500,6 @@
   .focus-visible\:outline-dp1 {
     &:focus-visible {
       outline-color: var(--color-dp1);
-    }
-  }
-  .focus-visible\:outline-dp2 {
-    &:focus-visible {
-      outline-color: var(--color-dp2);
     }
   }
   .sm\:block {

@@ -224,6 +224,7 @@ pub async fn schedules(auth_session: AuthSession) -> impl IntoResponse {
 struct MakeScheduleTemplate {
   pub user: Option<User>,
   pub csrf_token: String,
+  pub db_msg: String,
 }
 
 pub async fn make_schedule(auth_session: AuthSession) -> impl IntoResponse {
@@ -236,20 +237,21 @@ pub async fn make_schedule(auth_session: AuthSession) -> impl IntoResponse {
   let template = MakeScheduleTemplate {
     user: auth_session.user,
     csrf_token: token,
+    db_msg: String::new(),
   };
   HtmlTemplate(template)
 }
 
 //-------------------------------------------------------------
-// VIEWSCHEDULE:
+// BCBAVIEWSCHEDULE:
 #[derive(Template)]
 #[template(path = "view_schedules.html")]
-struct ViewSchedulesTemplate {
+struct BCBAViewSchedulesTemplate {
   user: Option<User>,
 }
 
 pub async fn view_schedules(auth_session: AuthSession) -> impl IntoResponse {
-  let template = ViewSchedulesTemplate {
+  let template = BCBAViewSchedulesTemplate {
     user: auth_session.user,
   };
   HtmlTemplate(template)
@@ -258,11 +260,12 @@ pub async fn view_schedules(auth_session: AuthSession) -> impl IntoResponse {
 // POSTCONSSCHEDULE:
 #[derive(Clone, Debug, Deserialize, serde::Serialize)]
 pub struct ConsAppt {
-  co_id: i32,
+  cons_id: i32,
   cl_id: i32,
   appt_date: chrono::NaiveDate,
   appt_time: chrono::NaiveTime,
-  parent_training: bool,
+  #[serde(default)]
+  parent_training: Option<bool>,
 }
 
 pub async fn post_cons_schedule(
@@ -272,51 +275,107 @@ pub async fn post_cons_schedule(
 ) -> impl IntoResponse {
   let appt_id:Result<i32, _> = sqlx::query_scalar(
     r#"
-      insert into consschedule(cons_id, cl_id, appt_date, appt_time, parent_training) vales ($1, $2, $3, $4, $5) returning appt_id
+      insert into schedule(client_id, technician_id, appt_date, appt_time, appt_type) values($1, $2, $3, $4, $5 ) returning appt_id   
     "#
   )
-  .bind(sched.co_id)
+  .bind(sched.cons_id)
   .bind(sched.cl_id)
   .bind(sched.appt_date)
   .bind(sched.appt_time)
   .bind(sched.parent_training)
   .fetch_one(&pool.pool)
   .await;
+
+  let token = generate_csrf_token();
+  auth_session
+    .session
+    .insert("csrf_token", &token)
+    .await
+    .unwrap();
+
   match appt_id {
-    Ok(appt_id) => String::from("Schedule ID number: ") + appt_id.to_string().as_str(),
-    Err(e) => e.to_string(),
+    Ok(appt_id) => {
+      let msg = String::from("Schedule ID number: ") + appt_id.to_string().as_str();
+      let template = MakeScheduleTemplate {
+        user: auth_session.user,
+        csrf_token: token,
+        db_msg: msg,
+      };
+      HtmlTemplate(template)
+    }
+    Err(e) => {
+      let msg = e.to_string();
+      let template = MakeScheduleTemplate {
+        user: auth_session.user,
+        csrf_token: token,
+        db_msg: msg,
+      };
+      HtmlTemplate(template)
+    }
   }
 }
 
 //-------------------------------------------------------------
-// POSTTECHSCHEDULE:
+// POSTSCHEDULE:
 #[derive(Deserialize, serde::Serialize, Clone, Debug)]
-pub struct TechAppt {
-  pub cl_id: i32,
-  pub technician_id: i32,
+pub struct MakeAppt {
+  pub client_id: i32,
+  pub therapist_id: i32,
   pub appt_date: chrono::NaiveDate,
   pub appt_time: chrono::NaiveTime,
+  pub appt_type: ApptType,
+}
+#[derive(
+  Clone, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd, serde::Serialize, sqlx::Type,
+)]
+#[sqlx(type_name = "appt_type", rename_all = "lowercase")]
+pub enum ApptType {
+  direct_service,
+  parent_training,
 }
 
-pub async fn post_tech_schedule(
+pub async fn post_schedule(
   auth_session: AuthSession,
   State(pool): State<AppState>,
-  Form(sched): Form<TechAppt>,
+  Form(sched): Form<MakeAppt>,
 ) -> impl IntoResponse {
   let appt_id:Result<i32, _> = sqlx::query_scalar(
         r#"
-          insert into techschedule( client_id, technician_id, appt_date, appt_time) values($1, $2, $3, $4 ) returning appt_id   
+          insert into schedule(client_id, therapist_id, appt_date, appt_time, appt_type) values($1, $2, $3, $4, $5 ) returning appt_id   
         "#)
-        .bind(sched.cl_id)
-        .bind(sched.technician_id)
+        .bind(sched.client_id)
+        .bind(sched.therapist_id)
         .bind(sched.appt_date)
         .bind(sched.appt_time)
+        .bind(sched.appt_type)
         .fetch_one(&pool.pool)
         .await;
+  let token = generate_csrf_token();
+  auth_session
+    .session
+    .insert("csrf_token", &token)
+    .await
+    .unwrap();
 
   match appt_id {
-    Ok(appt_id) => String::from("Schedule ID number: ") + appt_id.to_string().as_str(),
-    Err(e) => e.to_string(),
+    Ok(appt_id) => {
+      let msg = String::from("Schedule ID number: ") + appt_id.to_string().as_str();
+      let template = MakeScheduleTemplate {
+        user: auth_session.user,
+        csrf_token: token,
+        db_msg: msg,
+      };
+      HtmlTemplate(template)
+    }
+    Err(e) => {
+      let msg = e.to_string();
+      let template = MakeScheduleTemplate {
+        user: auth_session.user,
+        csrf_token: token,
+        db_msg: msg,
+      };
+      HtmlTemplate(template)
+    }
   }
 }
 //-------------------------------------------------------------
@@ -350,8 +409,6 @@ pub struct TreatmentPlan {
   client: i32,
   author: i32,
   date_created: chrono::NaiveDate,
-  client_name: String,
-  author_name: String,
   is_active: bool,
 }
 
@@ -404,8 +461,6 @@ pub async fn create_tp(auth_session: AuthSession) -> impl IntoResponse {
 pub struct InsertTreatmentPlan {
   client: i32,
   author_id: i32,
-  client_name: String,
-  author_name: String,
 }
 pub async fn post_tp(
   State(pool): State<AppState>,
@@ -414,13 +469,11 @@ pub async fn post_tp(
   let today: chrono::NaiveDate = chrono::Utc::now().date_naive();
   let go_id:Result<i32, _> = sqlx::query_scalar(
         r#"
-          insert into treatment_plans(client, author, date_created, client_name, author_name) values($1, $2, $3, $4, $5) returning tp_id   
+          insert into treatment_plans(client, author, date_created) values($1, $2, $3) returning tp_id   
         "#)
         .bind(tp.client)
         .bind(tp.author_id)
         .bind(today)
-        .bind(tp.client_name)
-        .bind(tp.author_name)
         .fetch_one(&pool.pool)
         .await;
 
@@ -509,13 +562,96 @@ pub async fn session_note(auth_session: AuthSession) -> impl IntoResponse {
 #[template(path = "schedule.html")]
 struct ScheduleTemplate {
   pub user: Option<User>,
+  pub appts: Vec<Appt>,
+  pub msg: String,
 }
 
-pub async fn schedule(auth_session: AuthSession) -> impl IntoResponse {
-  let template = ScheduleTemplate {
-    user: auth_session.user,
+#[derive(Clone, Debug, Deserialize, serde::Serialize, sqlx::FromRow)]
+pub struct Appt {
+  cl_f_name: String,
+  cl_l_name: String,
+  cl_id: i32,
+  therapist_id: i32,
+  appt_date: chrono::NaiveDate,
+  appt_time: chrono::NaiveTime,
+}
+
+pub async fn schedule(
+  auth_session: AuthSession,
+  State(pool): State<AppState>,
+) -> impl IntoResponse {
+  let clone = auth_session.clone().user.unwrap();
+  println!("{:#?}, {:#?}", &clone.id, &clone.role.clone());
+
+  match clone.role {
+    Role::Consultant => {
+      println!("matching conslutant");
+      let appts: Result<Vec<Appt>, _> =
+        sqlx::query_as(
+"select clients.cl_f_name, clients.cl_l_name, clients.cl_id, consschedule.appt_time, consschedule.appt_date, consschedule.therapist_id from clients inner join consschedule on clients.co_id = consschedule.therapist_id where therapist_id = $1")
+          .bind(clone.id)
+          .fetch_all(&pool.pool)
+          .await;
+
+      match appts {
+        Ok(appts) => {
+          println!("ok template");
+          let template = ScheduleTemplate {
+            user: auth_session.user,
+            appts,
+            msg: String::new(),
+          };
+          return HtmlTemplate(template);
+        }
+        Err(err) => {
+          println!("err template");
+          println!("{:#?}", err.to_string());
+          let template = ScheduleTemplate {
+            user: auth_session.user,
+            appts: vec![],
+            msg: String::new(),
+          };
+          return HtmlTemplate(template);
+        }
+      }
+    }
+    Role::Tech => {
+      println!("matching tech");
+      let appts: Result<Vec<Appt>, _> =
+        sqlx::query_as(
+"select clients.cl_f_name, clients.cl_l_name, clients.cl_id, techschedule.appt_time, techschedule.appt_date, techschedule.therapist_id from clients inner join techschedule on clients.cl_id = techschedule.cl_id where therapist_id = $1")
+          .bind(clone.id)
+          .fetch_all(&pool.pool)
+          .await;
+      match appts {
+        Ok(appts) => {
+          let template = ScheduleTemplate {
+            user: auth_session.user,
+            appts,
+            msg: String::new(),
+          };
+          return HtmlTemplate(template);
+        }
+        Err(err) => {
+          let template = ScheduleTemplate {
+            user: auth_session.user,
+            appts: vec![],
+            msg: err.to_string(),
+          };
+          return HtmlTemplate(template);
+        }
+      }
+    }
+    Role::Admin => {
+      println!("matching admin");
+      let template = ScheduleTemplate {
+        user: auth_session.user,
+        appts: Vec::new(),
+        msg: String::new(),
+      };
+      return HtmlTemplate(template);
+    }
   };
-  HtmlTemplate(template)
 }
 //------------------------------------------
 // REGISTER USER:
